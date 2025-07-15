@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block title %}Shot Distribution Search{% endblock %}
+
+{% block main %}
+  <h2>Shot Distribution Search</h2>
+  <form action="{{ url_for('player_shot_distribution') }}" method="post" class="mb-3">
+    <input name="name" type="text" placeholder="Player Name" required>
+    <input name="season" type="number" placeholder="Season" value="{{ current_year }}" required>
+    <button class="btn btn-primary" type="submit">Show Distribution</button>
+  </form>
+{% endblock %}

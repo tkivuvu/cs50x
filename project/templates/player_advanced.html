@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+{% block title %}Advanced Player Stats{% endblock %}
+
+{% block main %}
+  <div class="row">
+    <div class="col-md-4">
+      <div class="stats-card p-4 text-center">
+        <h2>
+            {{ stats.playerName }} ({{ stats.season }})
+        </h2>
+        <h2>
+          {% if stats.is_hof %}
+            <span class="badge bg-warning text-dark">Hall of Fame</span>
+          {% endif %}
+        </h2>
+        <h4 class="text-danger">Team: {{ display_team }}</h4>
+        {% if team_logo_url %}
+            <img src="{{ team_logo_url }}" alt="{{ display_team }} logo" width="140" class="my-2">
+          {% elif team_logo_urls %}
+            {% for url in team_logo_urls %}
+              <img src="{{ url }}" alt="Team logo" width="100" class="mx-1 my-2">
+            {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-md-8">
+      <ul>
+        <li>Games Played: {{ stats.games }}</li>
+        <li>Minutes Played: {{ stats.minutesPlayed }}</li>
+        <li>Minutes/Game: {{ stats.minutespergame }}</li>
+        <li>Usage Percent: {{ stats.usagePercent }}%</li>
+        <li>PER (Player Efficiency Rating): {{ stats.per }}</li>
+        <li>Offensive Win Shares: {{ stats.offensiveWS }}</li>
+        <li>Defensive Win Shares: {{ stats.defensiveWS }}</li>
+        <li>Win Shares: {{ stats.winShares }}</li>
+        <li>True Shooting Percentage: {{ stats.tsPercent }}%</li>
+        <li>Freethrow Rate (FT attempts / FG attempts): {{ stats.ftr }}%</li>
+        <li>Offensive Rebound Percent: {{ stats.offensiveRBPercent }}%</li>
+        <li>Defensive Rebound Percent: {{ stats.defensiveRBPercent }}%</li>
+        <li>Total Rebound Percent: {{ stats.totalRBPercent }}%</li>
+        <li>Assist Percent: {{ stats.assistPercent }}%</li>
+        <li>Steal Percent: {{ stats.stealPercent }}%</li>
+        <li>Block Percent: {{ stats.blockPercent }}%</li>
+        <li>TO Percent: {{ stats.turnoverPercent }}%</li>
+        <li>BPM (Box Plus Minus): {{ stats.box }}</li>
+        <li>VORP (Value Over Placement Player): {{ stats.vorp }}</li>
+
+      </ul>
+
+      {# only show button if multiple team entries exist #}
+      {% if team_rows|length > 1 %}
+        <button id="toggle-teams" class="btn btn-secondary mb-3">
+          Show By Team
+        </button>
+
+        <div id="by-team" style="display:none;">
+          {% for t in team_rows %}
+            <div class="card mb-2 p-2">
+              <h5>{{ t.team }}</h5>
+              {% if t.logo_url %}
+                <img src="{{ t.logo_url }}" alt="{{ t.team }} logo" width="80" class="mb-2">
+              {% endif %}
+              <ul class="mb-0">
+                <li>Games Played: {{ t.games }}</li>
+                <li>Minutes Played: {{ t.minutesPlayed }}</li>
+                <li>Minutes/Game: {{ t.minutespergame }}</li>
+                <li>Usage Percent: {{ t.usagePercent }}%</li>
+                <li>PER (Player Efficiency Rating): {{ t.per }}</li>
+                <li>Offensive Win Shares: {{ t.offensiveWS }}</li>
+                <li>Defensive Win Shares: {{ t.defensiveWS }}</li>
+                <li>Win Shares: {{ t.winShares }}</li>
+                <li>True Shooting Percentage: {{ t.tsPercent }}%</li>
+                <li>Freethrow Rate (FT divided by total FG attempts): {{ t.ftr }}%</li>
+                <li>Offensive Rebound Percent: {{ t.offensiveRBPercent }}%</li>
+                <li>Defensive Rebound Percent: {{ t.defensiveRBPercent }}%</li>
+                <li>Total Rebound Percent: {{ t.totalRBPercent }}%</li>
+                <li>Assist Percent: {{ t.assistPercent }}%</li>
+                <li>Steal Percent: {{ t.stealPercent }}%</li>
+                <li>Block Percent: {{ t.blockPercent }}%</li>
+                <li>TO Percent: {{ t.turnoverPercent }}%</li>
+                <li>BPM (Box Plus Minus): {{ t.box }}</li>
+                <li>VORP (Value Over Placement Player): {{ t.vorp }}</li>
+              </ul>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <script>
+    const teamBtn = document.getElementById("toggle-teams");
+    if (teamBtn) {
+      teamBtn.addEventListener("click", function () {
+        const d = document.getElementById("by-team");
+        const showing = d.style.display === "block";
+        d.style.display = showing ? "none" : "block";
+        this.textContent = showing ? "Show By Team" : "Hide By Team";
+      });
+    }
+  </script>
+{% endblock %}
+

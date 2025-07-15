@@ -1,0 +1,15 @@
+-- 14.finding the passengers on flight_id 36 as this is the first
+-- flight out the next day after the crime and matching them to
+-- passport numbers I gathered from my 4 main suspects.
++-----------+-----------------+
+| flight_id | passport_number | name
++-----------+-----------------+
+| 36        | 7214083635*      | Doris (only name that matches both receiver of call and someone on that flight_id 36)
+| 36        | 1695452385*      | Sofia
+| 36        | 5773159633*      | Bruce
+| 36        | 1540955065      |
+| 36        | 8294398571*      | Kelsey
+| 36        | 1988161715      |
+| 36        | 9878712108      |
+| 36        | 8496433585      |
++-----------+-----------------+

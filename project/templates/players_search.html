@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block title %}Quick Player Access{% endblock %}
+
+{% block main %}
+  <h2>Quick Player Lookup</h2>
+  <form action="{{ url_for('players_quick_access') }}" method="post" class="mb-3">
+    <div class="mb-2">
+      <input name="name"
+             type="text"
+             placeholder="Player Name"
+             class="form-control"
+             required>
+    </div>
+    <div class="mb-2">
+      <input name="season"
+             type="number"
+             placeholder="Season (e.g. {{ current_year }})"
+             class="form-control">
+      <small class="form-text text-muted">
+        Leave blank to use {{ current_year }}.
+      </small>
+    </div>
+    <button class="btn btn-primary">Go</button>
+  </form>
+{% endblock %}

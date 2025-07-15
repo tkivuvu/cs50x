@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+
+{% block title %}Playoff Stats Totals{% endblock %}
+
+{% block main %}
+    <div class="row">
+      <div class="col-md-4">
+        <div class="stats-card p-4 text-center">
+          <h2>
+            {{ stats.playerName }} ({{ stats.season }})
+          </h2>
+          <h2>
+            {% if stats.is_hof %}
+              <span class="badge bg-warning text-dark">Hall of Fame</span>
+            {% endif %}
+          </h2>
+          <h4 class="text-danger">Team: {{ stats.team }}</h4>
+          <img src="{{ team_logo_url }}" alt="{{ display_team }} logo" width="140" class="my-2">    
+        </div>
+      </div>
+      <div class="col-md-8">
+        <ul>
+          <li>Games Played: {{ stats.games }}</li>
+          <li>Points Total: {{ stats.points }}</li>
+          <li>Assist Total: {{ stats.assists }}</li>
+          <li>Rebound Total: {{ stats.totalRb }}</li>
+          <li>Def Rebound Total: {{ stats.defensiveRb }}</li>
+          <li>Off Rebound Total: {{ stats.offensiveRb }}</li>
+          <li>Steals Total: {{ stats.steals }}</li>
+          <li>Blocks Total: {{ stats.blocks }}</li>
+          <li>Freethrow Made: {{ stats.ft }}</li>
+          <li>Freethrow Attempts: {{ stats.ftAttempts }}</li>
+          <li>FT Percent: {{ stats.ftpercent }}%</li>
+          <li>Total FG Made: {{ stats.fieldGoals }}</li>
+          <li>Total FG Attempts: {{ stats.fieldAttempts }}</li>
+          <li>FG Percent: {{ stats.fieldpercent }}%</li>
+          <li>2pt FG Made: {{ stats.twoFg }}</li>
+          <li>2pt FG Attempts: {{ stats.twoAttempts }}</li>
+          <li>2pt FG Percent: {{ stats.twopercent }}%</li>
+          <li>3pt FG Made: {{ stats.threeFg }}</li>
+          <li>3pt FG Attempts: {{ stats.threeAttempts }}</li>
+          <li>3pt FG Percent: {{ stats.threepercent }}%</li>
+          <li>Effective FG Percent: {{ stats.effectfgpercent }}%</li>
+          <li>Total Turnovers: {{ stats.turnovers }}</li>
+          <li>Total Personal Fouls: {{ stats.personalFouls }}</li>
+        </ul>
+
+        <!-- averages toggle -->
+        <button id="toggle-averages" class="btn btn-secondary mb-3">
+          Show Averages
+        </button>
+        <div id="averages" style="display:none;">
+          <ul>
+            <li>Avg Points/Game: {{ stats.avg_points }}</li>
+            <li>Avg Assists/Game: {{ stats.avg_assists }}</li>
+            <li>Avg Rebounds/Game: {{ stats.avg_rebounds }}</li>
+            <li>Avg Steals/Game: {{ stats.avg_steals }}</li>
+            <li>Avg Blocks/Game: {{ stats.avg_blocks }}</li>
+            <li>Avg FT Made/Game: {{ stats.avg_ft }}</li>
+            <li>Avg FT Attempts/Game: {{ stats.avg_ftattempts }}</li>
+            <li>Avg FG Made/Game: {{ stats.avg_fieldgoals }}</li>
+            <li>Avg FG Attempts/Game: {{ stats.avg_fieldattempts }}</li>
+            <li>Avg 2pt FG Made/Game: {{ stats.avg_twofg }}</li>
+            <li>Avg 2pt FG Attempts/Game: {{ stats.avg_twoattempts }}</li>
+            <li>Avg 3pt FG Made/Game: {{ stats.avg_threefg }}</li>
+            <li>Avg 3pt FG Attempts/Game: {{ stats.avg_threeattempts }}</li>
+            <li>Avg TO/Game: {{ stats.avg_turnovers }}</li>
+            <li>Avg Fouls/Game: {{ stats.avg_personalfouls }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById("toggle-averages").addEventListener("click", function(){
+        const avgDiv = document.getElementById("averages");
+        const showing = avgDiv.style.display === "block";
+        avgDiv.style.display  = showing ? "none" : "block";
+        this.textContent     = showing ? "Show Averages" : "Hide Averages";
+      });
+    </script>
+{% endblock %}

@@ -1,0 +1,14 @@
+these are the names etc of people whose license plate left the bakery
+within 10 minutes of the crime
++---------+---------------+-----------------+--------+
+|  name   | license_plate | passport_number |   id   |
++---------+---------------+-----------------+--------+
+| Vanessa | 5P2BI95       | 2963008352      | 221103 |
+| Barry   | 6P58WS2       | 7526138472      | 243696 |
+| Iman    | L93JTIZ       | 7049073643      | 396669 |
+| Sofia*  | G412CB7       | 1695452385      | 398010 |
+| Luca    | 4328GD8       | 8496433585      | 467400 |
+| Diana   | 322W7JE       | 3592750733      | 514354 |
+| Kelsey* | 0NTHK55       | 8294398571      | 560886 |
+| Bruce*  | 94KL13X       | 5773159633      | 686048 |
++---------+---------------+-----------------+--------+

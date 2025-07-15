@@ -1,0 +1,15 @@
+-- used numbers from callers (and then receivers in next query) that lasted less
+-- than a min to match number plates from bakery who left within 10min of crime.
++---------+--------+
+|  name   |   id   |
++---------+--------+
+| Sofia*   | 398010 |
+| Kelsey*  | 560886 |
+| Bruce*   | 686048 |
+| Kelsey*  | 560886 |
+| Taylor  | 449774 |
+| Diana   | 514354 |
+| Carina  | 907148 |
+| Kenny   | 395717 |
+| Benista | 438727 |
++---------+--------+

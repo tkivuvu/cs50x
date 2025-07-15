@@ -1,0 +1,9 @@
+-- 12.finding the four phone numbers of my main suspects.
++--------+----------------+
+|  name  |  phone_number  |
++--------+----------------+
+| Sofia  | (130) 555-0289 |
+| Diana  | (770) 555-1861 |
+| Kelsey | (499) 555-9472 |
+| Bruce  | (367) 555-5533 |
++--------+----------------+

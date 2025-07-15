@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block title %}Advanced Playoff Stats{% endblock %}
+
+{% block main %}
+  <div class="row">
+    <div class="col-md-4">
+      <div class="stats-card p-4 text-center">
+        <h2>
+          {{ stats.playerName }} ({{ stats.season }})
+        </h2>
+        <h2>
+          {% if stats.is_hof %}
+            <span class="badge bg-warning text-dark">Hall of Fame</span>
+          {% endif %}
+        </h2>
+        <h4 class="text-danger">Team: {{ stats.team }}</h4>
+        <img src="{{ team_logo_url }}" alt="{{ display_team }} logo" width="140" class="my-2">
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <ul>
+        <li>Games Played: {{ stats.games }}</li>
+        <li>Minutes Played: {{ stats.minutesPlayed }}</li>
+        <li>Minutes/Game: {{ stats.minutespergame }}</li>
+        <li>Usage Percent: {{ stats.usagePercent }}%</li>
+        <li>PER (Player Efficiency Rating): {{ stats.per }}</li>
+        <li>Offensive Win Shares: {{ stats.offensiveWS }}</li>
+        <li>Defensive Win Shares: {{ stats.defensiveWS }}</li>
+        <li>Win Shares: {{ stats.winShares }}</li>
+        <li>True Shooting Percentage: {{ stats.tsPercent }}%</li>
+        <li>Freethrow Rate (FT divided by total FG attempts): {{ stats.ftr }}%</li>
+        <li>Offensive Rebound Percent: {{ stats.offensiveRBPercent }}%</li>
+        <li>Defensive Rebound Percent: {{ stats.defensiveRBPercent }}%</li>
+        <li>Total Rebound Percent: {{ stats.totalRBPercent }}%</li>
+        <li>Assist Percent: {{ stats.assistPercent }}%</li>
+        <li>Steal Percent: {{ stats.stealPercent }}%</li>
+        <li>Block Percent: {{ stats.blockPercent }}%</li>
+        <li>TO Percent: {{ stats.turnoverPercent }}%</li>
+        <li>BPM (Box Plus Minus): {{ stats.box }}</li>
+        <li>VORP (Value Over Placement Player): {{ stats.vorp }}</li>
+        <!-- add any other advanced fields from the playoff dict here -->
+      </ul>
+    </div>
+  </div>
+{% endblock %}

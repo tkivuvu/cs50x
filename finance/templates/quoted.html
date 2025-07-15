@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Quote
+{% endblock %}
+
+{% block main %}
+
+    <h1>Stock info:</h1>
+    <hr>
+
+    <p>Name: {{ quote_data["name"] }}</p>
+    <p>Price: {{ quote_data["price"] | usd }}</p>
+    <p>Symbol: {{ quote_data["symbol"] }}</p>
+
+{% endblock %}

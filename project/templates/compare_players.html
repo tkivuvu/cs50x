@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block title %}Compare: {{ p1 }} vs {{ p2 }}{% endblock %}
+
+{% block main %}
+  <h2>{{ p1 }} vs {{ p2 }} ({{ season }})</h2>
+
+  <div style="display: flex; gap: 40px; align-items: flex-start; margin-top: 20px;">
+    <!-- Radar Chart -->
+    <div style="flex: 1; text-align: center;">
+      <img src="{{ url_for('compare_players_plot') }}?p1={{ p1 }}&p2={{ p2 }}&season={{ season }}"
+           alt="Radar: {{ p1 }} vs {{ p2 }}" style="max-width: 100%; height: auto;">
+    </div>
+
+    <!-- Stats Tables -->
+    <div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+      <!-- Player 1 Stats -->
+      <div>
+        <h4>{{ p1 }}</h4>
+        <ul class="list-group">
+          <li class="list-group-item">PPG: {{ stats1['PPG']|round(1) }}</li>
+          <li class="list-group-item">APG: {{ stats1['APG']|round(1) }}</li>
+          <li class="list-group-item">RPG: {{ stats1['RPG']|round(1) }}</li>
+          <li class="list-group-item">BPG: {{ stats1['BPG']|round(1) }}</li>
+          <li class="list-group-item">FG%: {{ stats1['FG%']|round(1) }}%</li>
+          <li class="list-group-item">PER: {{ stats1['PER']|round(1) }}</li>
+          <li class="list-group-item">Win Shares: {{ stats1['WinShares']|round(1) }}</li>
+          <li class="list-group-item">Usage%: {{ stats1['Usage%']|round(1) }}%</li>
+          <li class="list-group-item">BPM: {{ stats1['BPM']|round(1) }}</li>
+        </ul>
+      </div>
+
+      <!-- Player 2 Stats -->
+      <div>
+        <h4>{{ p2 }}</h4>
+        <ul class="list-group">
+          <li class="list-group-item">PPG: {{ stats2['PPG']|round(1) }}</li>
+          <li class="list-group-item">APG: {{ stats2['APG']|round(1) }}</li>
+          <li class="list-group-item">RPG: {{ stats2['RPG']|round(1) }}</li>
+          <li class="list-group-item">BPG: {{ stats2['BPG']|round(1) }}</li>
+          <li class="list-group-item">FG%: {{ stats2['FG%']|round(1) }}%</li>
+          <li class="list-group-item">PER: {{ stats2['PER']|round(1) }}</li>
+          <li class="list-group-item">Win Shares: {{ stats2['WinShares']|round(1) }}</li>
+          <li class="list-group-item">Usage%: {{ stats2['Usage%']|round(1) }}%</li>
+          <li class="list-group-item">BPM: {{ stats2['BPM']|round(1) }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

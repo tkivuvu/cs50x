@@ -1,0 +1,201 @@
+04.08
+still lots to do but will need to look carefully at the API so as to avoid using the
+wrong or unnecessary data, still need to look at what i have just added namely
+using id as a unique identifier primary key that is in order to find specific data
+the point here is that looking at the API's data structure each ID value is the
+identifier for lets say for e.g 2023 lebron stats or 2021 kyrie stats each of these
+has its own id and this is what seperates them best not season or even player names
+the thing that is consistent (for each player as opposed to each data point) is
+playerId this seems to be the same throughout and should be used as the unique
+identifier above all else and for the simple id value this is in regards to which data
+you are looking at as a whole meaning for e.g is this playerdatatotals or
+playerdataadvanced or PlayerDataAdvancedPlayoffs etc..
+
+
+04.10
+another thing ive realised and will have to account for with conditionals in my flask app
+is that when a player appears more than once in data totals its because they moved teams
+during the year and therefore their full stats are where team:"TOT" column in the
+API dataset appears so whenever this supposed TOT team which isnt a team at all but rather
+i believe means totals meaning for all the teams they have played for that year
+
+
+04.11
+now that i have the API i want and i am able to retrieve the info cache it and use it
+as i please i need to figure out how i would like to structure my website. this means
+what would i like to put on my index page for e.g how many pages will i have what will
+these pages contain? will i create a login requirement if so for what exactly remember
+the finance one was due to the fact that this is a personal account handling the purchase
+and selling of stocks so it made sense, i cant create something like that if it is not needed
+will need to check with the AI if this is something that would be useful for the purpose
+of the website i am creating because there is still quite a lot to do including finding all the
+right stats which to use and how and also finding the charts and how that whole thing works
+i.e chart creation.. will need to go back to the top of my AI queries and see what were the
+suggestions as it pertains to what i should include on the website
+
+
+04.12
+i am not going to do the users thing for now because there is no reason for it just yet what
+i should be doing is looking at the stats and figuring out which i would like to use and then
+proceed one by one implementing the html and helpers.py retrieval process from the API. starting
+with the stats i already have i can proceed for today with implementing the table that will
+contain these stats but where and how would i like to make the request from index page or have a
+button on the index page that takes me to this other page that will then be where i make the
+request for the stats and also show them on that same page? or create another one that will
+send me there once i click on the search from there.
+
+will also need to structure my data appropriately the best way to seach for a player's stats
+in playerdatatotals for example is using the playerID this the unique ID each player has and
+seems to be consistent throughout also remember again that if a player has team: "TOT" this means
+that they have played for more than one team and this tot represents the totality of their stats
+instead of any one statsheet that says what the team is- which in contrast represents just the
+stats on that specific team that year
+
+here is what cs50AI says about primary keys:
+Choosing a primary key is an important decision in database design. A primary key should uniquely
+identify each record in a table. In your case, if each player has a unique playerID, that would
+be a good choice for a primary key.
+If playerID is not unique, you might need to create a composite key using multiple fields, or
+generate a new unique identifier for each record.
+
+also tomorrow around 2.44p check if the stats from today have been removed
+because i am not sure the deletion of the older query is being adhered to
+
+04.13
+my homepage should explain what this website is about and not necessarily have any seaching options
+because this should probably just be buttons that lead to those pages that you can then look stats
+up at, or if this is where i want people to search from that is also fine but i will have to separate
+each query and thus have a form
+
+will need to figure out a logic that when i want to display a player that has played
+for multiple teams in any one year you can see stats for each team instead of just tot as
+the team name but maybe saying something like played for nyk, tor etc and then the stats
+
+also the url for the joakim meme is here: https://i.imgur.com/ibPry8m.jpeg
+
+4.16
+i now have most (if not all) of the necessary logic and programming to retrieve and cache the
+necessary data from the API, the thing to do next is to try and figure out what i would like
+my website to actually look like this seems small but will be big i might start from scratch
+since i dont love what it looks like right now and although i might never love it this doesnt
+matter what matters is its functionality smoothness etc i want a user to be able to use it in way
+that makes sense to them where the data is in its right place etc...
+
+4.18
+the way in which the website will look:
+- layout should consider removing the player search
+- the player search should instead be put where each stat section is in the way in which
+we did for quote and quoted in finance program so for each data type (e.g advanced playoff stats)
+rather than searching at the index
+- do i wanna also look at ways in which to maybe show each stats for a player that
+has moved teams meaning og or luka moved in 2024 then it should show here are the stats
+for dallas then here are for lakers and here they are combined?
+- the stats from totals and anything before the playoffs does save all three of json format
+stats meaning for e.g luka's stats are saved from dallas and LA and total as "2tm" for the value
+to the "team" key
+- maybe put in logic like- if a player has more than 1 team then combine the numbers and do such and
+such, or show the stats for each meaning total, former team, current team (current team remember -- it
+seems -- cannot be the first stats json, it is either the 2nd or 3rd stat sheet see examples: Zach
+LaVine, Luka Dončić, jimmy butler)
+- sidenote ftr means freethrow rate and it is the percentage of your field goals that are freethrows
+calculated as fta/fga
+
+4.19
+- for the advanced stats function and template look up what the most important advanced stats are
+and what they mean, display those (also maybe add all of the other stats with the click of a button
+like i have been doing that show all of the stats and not just these few ones i have picked even for
+the previous template namely player_totals.html)
+- first finish all of the templates before thinking about the graphs and such and what those might look
+like (already thinking maybe show graphs of each player for their carreer? maybe using like win shares or
+some stat that best shows the progression of a player through the years?)
+
+
+4.22
+- now that all of the API requests are complete and the templates that are used to show that data, I can
+begin thinking about what should come next but also refining my templates first and foremost.
+- this refining will involve figuring out the aesthetics of my page, what do i want to show should i look
+to show all of the stats maybe hidden under a clickable button? this may be best so as to avoid having too
+much information unprompted therefore probably best to show the most important stats or those that seem to
+be for me atleast and then hide behind the button the rest of the data if the user chooses to view them
+will be up to them.
+- then i can start to think of the graphs? what would they look like and most importantly what
+would they be telling me? (look above previous paragraph for more on this)
+- also what to do with the players search thing? is it necessary? it looks nice but what is its usefulness?
+maybe i could make it so that when someone search a player i give them all of the stats for all four API
+queries/functions but only for the current year we are in? so e.g if a user search for luka doncic i should
+provide them with all of the stats that i have for the current year (hmm or maybe the previous since the API
+does not seem to be updating curent playoff numbers in a timely manner)
+
+4.23
+- I will need to add logic that says if a player has an asteriks* at the end of their name in the playerName
+column then it means they are in the hall of fame (Naismith Memorial Basketball Hall of Fame)
+
+4.30
+- special case for Dennis Schröder who has had 3 diff teams in a year so see how to make that work and
+how it can look like the rest
+
+5.1
+- will need to add inside of totals stats the attempts as well as i am putting for e.g avg fg but not saying
+this is only made attempts and also not specifying the attempts themselves this should be done for overall
+FG, 2pt FG, 3pt FG, and FTs
+- also for both playoff totals and advanced playoff stats which or the two i still have to finish you can copy
+most of the logic from regular season stats just always remebering a player can only play for one team in the
+playoffs 
+
+5.7
+- fix the null thing for Tim Duncan 2011 playoff lookup? (causing a internal server error due to value for
+3pt percentage being equal to null and thus the compute in my logic does not pass) 
+
+5.8
+- when it comes to generating charts this sounds great in theory but what would they entail? they should be 
+pretty informative when it comes to 
+
+5.12
+- maybe one last chart/graph, a pie chart that compares shooting splits between 2pt, 3pt and ft?
+
+6.4
+- add a collage of players in the blue navigation area in the layout 
+
+6.5
+- nav background- maybe a line of all team logos going around the nav bar 
+
+6.16
+- tomorrow finish the readme.md file for the app.py summary, overall final version of it all and then 
+for helpers.py cleanup the code with comments and the like if necessary
+
+6.17
+- not too much left just getting a summary of the templates and accompanying css styling then finally
+the video which i should first thoroughly understand all that my code contains before creating it the 
+overall summary of everything will be more than enough of a template to base my explanations on
+
+
+ATL = atlanta hawks 
+BOS = boston celtics
+CHI = chicago bulls
+CHO = charlotte hornets
+BRK = brooklyn nets
+CLE = cleveland cavaliers
+MIA = Miami Heat
+NYK = New York Knicks
+TOR = toronto raptors
+DET = detroit pistons 
+ORL = Orlando magic
+PHI = philadelphia 76ers
+IND = indiana pacers
+WAS = washington wizards
+MIL = milwaukee bucks
+LAC = LA clippers
+LAL = LA lakers
+DAL = dallas mavericks 
+DEN = denver nuggets
+MIN = minnesota timberwolves
+MEM = memphis grizzlies
+OKC = OKC thunder
+NOP = New orleans pelicans
+POR = portalnd traiblazers
+PHO = phoenix suns
+SAS = san antonio spurs
+UTA = utah jazz
+SAC = sacramento kings
+GSW = golden state warriors
+HOU = houston rockets

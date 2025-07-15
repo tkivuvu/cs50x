@@ -1,0 +1,15 @@
+-- same as previous query but this one deals with receivers not callers to find
+-- the accomplice.
++------------+--------+
+|    name    |   id   |
++------------+--------+
+| James      | 250277 |
+| Larry      | 251693 |
+| Anna       | 484375 |
+| Jack       | 567218 |
+| Melissa    | 626361 |
+| Jacqueline | 712712 |
+| Philip     | 847116 |
+| Robin      | 864400 |
+| Doris      | 953679 |
++------------+--------+

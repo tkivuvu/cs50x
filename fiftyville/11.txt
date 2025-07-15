@@ -1,0 +1,14 @@
+-- join tables for bank accounts and for people to find the names, id of
+the accounts associated with those accounts from query 4 (table at 4.txt)
++---------+--------+
+|  name   |   id   |
++---------+--------+
+| Bruce*  | 686048 |
+| Diana   | 514354 |
+| Brooke  | 458378 |
+| Kenny*  | 395717 |
+| Iman    | 396669 |
+| Luca*   | 467400 |
+| Taylor* | 449774 |
+| Benista*  438727 |
++---------+--------+

@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block title %}Player: {{ name }} ({{ season }}){% endblock %}
+
+{% block main %}
+  <h2>{{ name }} — Season {{ season }}</h2>
+  <div class="d-flex gap-3 mt-4">
+    <!-- Totals button/form -->
+    <form action="{{ url_for('player_stats_totals') }}" method="post">
+      <input type="hidden" name="name"   value="{{ name }}">
+      <input type="hidden" name="season" value="{{ season }}">
+      <button class="btn btn-success">
+        View Totals
+      </button>
+    </form>
+
+    <!-- Advanced button/form -->
+    <form action="{{ url_for('player_stats_advanced') }}" method="post">
+      <input type="hidden" name="name"   value="{{ name }}">
+      <input type="hidden" name="season" value="{{ season }}">
+      <button class="btn btn-info">
+        View Advanced
+      </button>
+    </form>
+  </div>
+{% endblock %}

@@ -1,0 +1,14 @@
+the account numbers of everyone that withdrew money at the specific location
+mentioned in the interviews on the day of the crime.
++----------------+--------+
+| account_number | amount |
++----------------+--------+
+| 28500762       | 48     |
+| 28296815       | 20     |
+| 76054385       | 60     |
+| 49610011       | 50     |
+| 16153065       | 80     |
+| 25506511       | 20     |
+| 81061156       | 30     |
+| 26013199       | 35     |
++----------------+--------+

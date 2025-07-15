@@ -1,0 +1,24 @@
+from cs50AI:
+
+It looks like you're off to a good start! You're correctly opening the file and reading
+it in chunks of 512 bytes.
+
+Here are a few questions to help guide you further:
+
+1. How do you plan to identify the start of a new JPEG file?
+2. What will you do once you identify the start of a new JPEG file?
+3. How will you handle writing the recovered JPEG files to disk?
+
+Think about these steps and try to implement them one by one. Let me know if you have
+specific questions about any of these steps!
+
+
+before doing the below remember to maybe also ask if you should create some for loop
+that will handle the naming of the files with sprintf or if that is unnecessary
+question:
+would this be a good place to allocate memory to a string which will be the
+name of the files?
+Answer:
+Yes, this would be a good place to allocate memory for the filename string. You can use
+sprintf to format the filename. How do you think you can use sprintf to create filenames
+like 000.jpg, 001.jpg, etc.?

@@ -1,0 +1,7 @@
+-- 13.finding the destination airport from the earliest flight out
+-- the day after the crime.
++----+--------------+-------------------+---------------+
+| id | abbreviation |     full_name     |     city      |
++----+--------------+-------------------+---------------+
+| 4  | LGA          | LaGuardia Airport | New York City |
++----+--------------+-------------------+---------------+

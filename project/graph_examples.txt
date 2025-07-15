@@ -1,0 +1,100 @@
+1. Player Efficiency Over Time (Line Chart)
+    What it shows: Trends in key stats (e.g., points, assists, rebounds) over seasons/games.
+
+    Why it matters: Identifies improvement, decline, or consistency (e.g., "LeBron’s scoring dipped in 2021 but 
+    rebounding improved").
+
+    Example metrics:
+
+    Points per game (PPG)
+
+    Assists per game (APG)
+
+    Player Efficiency Rating (PER) over time.
+
+2. Shot Chart (Heatmap or Scatter Plot)
+    What it shows: Shooting accuracy from different court locations.
+
+    Why it matters: Reveals a player’s "hot zones" and weaknesses (e.g., "Steph Curry dominates from beyond the arc").
+
+    Data needed:
+
+    Shot coordinates (x/y positions from NBA API).
+
+    FG% by zone (restricted area, mid-range, 3PT).
+
+3. Player Comparison (Radar/Spider Chart)
+    What it shows: Multi-stat comparison between two players (e.g., scoring, defense, playmaking).
+
+    Why it matters: Highlights strengths/weaknesses in a head-to-head format.
+
+    Example stats:
+
+    PPG, APG, RPG, STL, BLK, FG%.
+
+    Advanced stats (PER, Win Shares, Usage Rate).
+
+4. Shooting Splits (Pie/Bar Chart)
+    What it shows: Distribution of shot types (e.g., 3PT, mid-range, dunks).
+
+    Why it matters: Shows playstyle (e.g., "Giannis relies on paint scoring").
+
+    Data needed:
+
+    2PT vs. 3PT attempts.
+
+    Free throw frequency.
+
+5. Advanced Metrics Dashboard (Bar/Line Charts)
+    What it shows: Advanced analytics like:
+
+    PER (Player Efficiency Rating): Overall contribution.
+
+    TS% (True Shooting): Scoring efficiency.
+
+    BPM (Box Plus-Minus): Impact vs. league average.
+
+    Win Shares: Contribution to team wins.
+
+    Why it matters: Quantifies value beyond basic stats.
+
+6. Game Log Performance (Scatter Plot/Line Graph)
+    What it shows: Consistency across games (e.g., points scored each game in a season).
+
+    Why it matters: Identifies volatility (e.g., "Player X has 30+ points in 70% of games").
+
+7. Defensive Impact (Bar Chart/Heatmap)
+    What it shows: Defensive stats like steals, blocks, and defensive rating.
+
+    Why it matters: Highlights defensive specialists (e.g., "Rudy Gobert’s rim protection reduces opponent FG% by 15%").
+
+8. Playmaking Distribution (Donut Chart)
+    What it shows: Assist distribution to teammates (e.g., "Jokic feeds MPJ 25% of his assists").
+
+    Why it matters: Shows chemistry and playmaking focus.
+
+9. Plus/Minus Impact (Line Chart)
+    What it shows: Team performance when the player is on/off the court.
+
+    Why it matters: Measures overall impact (e.g., "Warriors outscore opponents by +12 with Curry").
+
+10. Player Archetype (Bubble Chart)
+    What it shows: Clusters players by playstyle (e.g., "Scorer", "3&D", "Playmaker").
+
+    Axes: Usage Rate vs. 3PT% vs. Assist Ratio.
+
+Tools to Implement:
+    D3.js: Highly customizable for complex visualizations (shot charts, heatmaps).
+
+    Chart.js/Plotly: Simpler for bar/line charts.
+
+    Python Libraries (if preprocessing data): Matplotlib, Seaborn.
+
+    NBA API Data: Use endpoints like shotchartdetail for shot locations.
+
+Tips for Design:
+    Add tooltips for granular data (e.g., exact FG% on hover).
+
+    Allow filters (e.g., by season, opponent, game type).
+
+    Use responsive charts for mobile users.

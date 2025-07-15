@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+        <link href="styles.css" rel="stylesheet">
+        <title>Trivia!</title>
+
+    </head>
+    <body>
+        <div class="header">
+            <h1>Trivia!</h1>
+        </div>
+
+        <div class="container">
+            <div class="section">
+                <h2>Part 1: Multiple Choice </h2>
+                <hr>
+                <!-- TODO: Add multiple choice question here -->
+                 <h3>What is the approximate ratio of people to sheep in New Zealand?</h3>
+                 <button id="myButton1">6 people per 1 sheep</button>
+                 <button id="myButton2">3 people per 1 sheep</button>
+                 <button id="myButton3">1 person per 1 sheep</button>
+                 <button id="myButton4">1 person per 3 sheep</button>
+                 <button id="myButton5">1 person per 5 sheep</button>
+                 <p id="myText1" style="display:none;">Correct!</p>
+                 <p id="myText2" style="display:none;">Incorrect.</p>
+
+            </div>
+
+            <div class="section">
+                <h2>Part 2: Free Response</h2>
+                <hr>
+                <!-- TODO: Add free response question here -->
+                 <h3>In which country is it illegal to own only one guinea pig, as a lone guinea pig
+                    might get lonely?</h3>
+                 <input type = "text" id="userInput">
+                 <button id="checkButton">Check Answer</button>
+                 <p id="resultText" style="display:none;"></p>
+            </div>
+        </div>
+        <script>
+            // TODO: Add code to check answers to questions
+            document.getElementById("myButton5").onclick = function() {
+                this.style.backgroundColor = "green";
+
+                document.getElementById("myText1").style.display = "block";
+            };
+            document.getElementById("myButton4").onclick = function() {
+                this.style.backgroundColor = "red";
+
+                document.getElementById("myText2").style.display = "block";
+            };
+            document.getElementById("myButton3").onclick = function() {
+                this.style.backgroundColor = "red";
+
+                document.getElementById("myText2").style.display = "block";
+            };
+            document.getElementById("myButton2").onclick = function() {
+                this.style.backgroundColor = "red";
+
+                document.getElementById("myText2").style.display = "block";
+            };
+            document.getElementById("myButton1").onclick = function() {
+                this.style.backgroundColor = "red";
+
+                document.getElementById("myText2").style.display = "block";
+            };
+            document.getElementById("checkButton").onclick = function() {
+                const input = document.getElementById("userInput").value;
+                const resultText = document.getElementById("resultText");
+                const userInput = document.getElementById("userInput");
+
+                if (input === "Switzerland") {
+                    resultText.textContent = "Correct!";
+                    userInput.style.backgroundColor = "green"
+                }
+                else {resultText.textContent = "Incorrect.";
+                    userInput.style.backgroundColor = "red";
+                }
+                resultText.style.display = "block";
+            };
+        </script>
+    </body>
+</html>

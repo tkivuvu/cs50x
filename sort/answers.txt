@@ -1,0 +1,18 @@
+sort1 uses: Bubble Sort
+
+How do you know?: Because it takes long when it is a worst case scenario e.g reversed
+or randomized list but is fast when it is a best case scenario e.g sorted list.
+Takes 5.38s to sort reversed list; Takes 0.5s to sort a sorted list.
+
+sort2 uses: Merge Sort
+
+How do you know?: Because it is fast in both scenarios whether best case so a sorted
+list or worst case so a reversed or randomized list. Takes 0.46s to sort reversed list;
+Takes 0.58s to sort a sorted list.
+
+sort3 uses: Selection Sort
+
+How do you know?: Because is is relatively slow in both cases whether it is a best case
+scenario so a sorted list or a worse case scenario so a reversed or randomized list.
+Takes 2.5s to sort reversed list; Takes 2.4s to sort a sorted list.
+

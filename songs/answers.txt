@@ -1,0 +1,11 @@
+So in terms of danceability if this database was that of one
+listener's top 100 songs the avg is 0.716 so more danceable than not
+in terms of energy the result is 0.659 so relatively energetic
+and valence is 0.484 so this is neutral so not very happy or very sad.
+
+this might not be very representative because it is an average and averages
+have many flaws including extreme values or skewed data and in this case
+we can use mode or median for better representation or we could use
+the genre of music the person likes maybe.
+
+

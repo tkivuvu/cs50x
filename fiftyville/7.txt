@@ -1,0 +1,6 @@
+this is information on the airport in Fiftyville
++-----------------------------+------------+--------------+----+
+|          full_name          |    city    | abbreviation | id |
++-----------------------------+------------+--------------+----+
+| Fiftyville Regional Airport | Fiftyville | CSF          | 8  |
++-----------------------------+------------+--------------+----+

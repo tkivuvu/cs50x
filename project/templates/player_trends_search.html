@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block title %}Player Trends Search{% endblock %}
+
+{% block main %}
+    <form action="{{ url_for('player_trends') }}" method="post">
+    <div class="mb-3">
+        <input name="name" placeholder="Player Name" type="text" required>
+        <input name="season" type="number" value="{{ current_year }}" required>
+    </div>
+    <button class="btn btn-primary" type="submit">Show Trends</button>
+    </form>
+{% endblock %}

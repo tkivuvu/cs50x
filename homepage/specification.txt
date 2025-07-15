@@ -1,0 +1,9 @@
+10 HTML tags: <div>, <thead>, <button>, <ul>, <li>, <a>, <h1>, <tr>, <p>, and <br>
+
+5 CSS properties: color, font-size, margin, background-color, and text-align.
+
+How I used JavaScript and Bootstrap:
+The way in which I used JavaScript was to create some logic as to how I would
+program a sports quiz this can be found in my sportsquiz.html as for bootstrap
+I used it to create my dropdown menu as well as my tables that are seen in
+eusoccer.html and nbabasketball.html.

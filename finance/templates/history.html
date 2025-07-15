@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    History
+{% endblock %}
+
+{% block main %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="text-end">Stock Symbol</th>
+                <th class="text-end">Stock Name</th>
+                <th class="text-start">Bought or Sold</th>
+                <th class="text-end">Purchase Price</th>
+                <th class="text-end">Sale Price</th>
+                <th class="text-end">Shares Bought</th>
+                <th class="text-end">Shares Sold</th>
+                <th class="text-end">Date and Time</th>
+            </tr>
+        </thead>
+        {% for items in result %}
+        <tbody>
+            <tr>
+                <td class="text-end">{{ items["symbol"] }}</td>
+                <td class="text-end">{{ items["name"] }}</td>
+                <td class="text-start">{{ items["bought_sold"] }}</td>
+                {% if items["purchase_price"] is not none %}
+                    <td class="text-end"> {{ items["purchase_price"] | usd }} </td>
+                {% else %}
+                    <td class="text-end">N/A</td>
+                {% endif %}
+                {% if items["sale_price"] is not none %}
+                    <td class="text-end"> {{ items["sale_price"] | usd }} </td>
+                {% else %}
+                    <td class="text-end">N/A</td>
+                {% endif %}
+                <td class="text-end"> {{ items["shares_bought"] }} </td>
+                <td class="text-end">{{ items["shares_sold"] }}</td>
+                <td class="text-end">{{ items["date_time"] }}</td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+{% endblock %}

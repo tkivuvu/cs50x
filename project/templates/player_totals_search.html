@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Player Totals Search
+{% endblock %}
+
+{% block main %}
+    <form action="/player_totals_search" method="post">
+        <div class="mb-3">
+            <!--autocomplete="off"-->
+            <input name="name" placeholder="Player Name" type="text">
+            <input type="number" name="season" value="2025">
+        </div>
+        <button class="btn btn-primary" type="submit">Search</button>
+    </form>
+{% endblock %}

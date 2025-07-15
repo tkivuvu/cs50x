@@ -1,0 +1,43 @@
+there are 4 main locations: atm location, bakery parking
+caller or receiver and flight
+- only one person is in all 4: bruce
+-
+
+people who are both atm location and callers:
+- bruce
+- diana
+- kenny
+- benista
+- taylor
+
+people who were at atm location, callers and leaving bakery:
+- bruce
+- diana
+
+people who were at atm location, callers, leaving bakery and on the flight:
+- bruce
+
+now receivers of calls:
+people who are both atm location and receivers of calls:
+- noone was both withdrawing money and a receiver of calls
+
+people who are both receivers of calls and leaving bakery:
+- noone
+
+people who were both receivers of calls and on the flight:
+- doris
+
+both atm and on the flight:
+- bruce
+- kenny
+- luca
+- taylor
+
+only both caller and leaving bakery and on flight:
+- kelsey
+
+only both leaving bakery and on flight:
+- luca
+
+leaving bakery caller and on flight
+- sofia

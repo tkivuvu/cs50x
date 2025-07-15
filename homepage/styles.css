@@ -1,0 +1,89 @@
+/* Default styles for larger screens */
+body {
+    background-color: #212529;
+    color: white;
+    font-size: 16px;
+}
+
+.header {
+
+    font-family: "Palatino", "URW Palladio L", serif;
+    color: white;
+    text-align: center;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.header1, hr, p {
+    font-family: "Palatino", "URW Palladio L", serif;
+    font-size: 17px;
+    margin-left: 20px;
+    margin-right: 20px;
+
+}
+
+a {
+    color: orange;
+}
+
+a:hover {
+    color: red;
+}
+
+.HMpara {
+    font-family: "Palatino", "URW Palladio L", serif;
+    font-size: 17px;
+    margin: 1px;
+}
+
+.table-dark {
+    font-family: "Palatino", "URW Palladio L", serif;
+    font-size: 17px;
+
+}
+
+.table-dark th {
+    font-size: 19px;
+}
+
+.dropdown  {
+    font-family: "Palatino", "URW Palladio L", serif;
+    font-size: 17px;
+    margin: 15px;
+}
+
+.btn-primary {
+
+    background-color: #212529;
+}
+
+.dropdown-menu {
+    background-color: #212529;
+}
+
+.dropdown-item {
+    color: white;
+}
+
+.sqheader1 {
+    font-family: "Palatino", "URW Palladio L", serif;
+    font-size: 17px;
+    margin-left: 35px;
+}
+
+.sqbutton {
+    margin-left: 20px;
+}
+
+/* Styles for screens smaller than 900px */
+@media (max-width: 900px) {
+    body, h1, h2, h3, h4, button, p {
+        font-size: 30px;
+    }
+    .dropdown-menu, .btn, .btn-primary, .dropdown-toggle {
+        font-size: 30px;
+    }
+    .table, .table-dark, .table-dark th, .table-dark td {
+        font-size: 30px;
+    }
+}

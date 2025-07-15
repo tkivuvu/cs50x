@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+
+{% block main %}
+<div class="container mt-5">
+    <h1 class="mb-4">NBA Stats Explorer</h1>
+    <p class="lead">
+        Welcome to the NBA Stats Hub! Explore comprehensive statistics of NBA players from the 1993 season to the present, including regular season and playoff data, advanced metrics, and graphical analyses.
+    </p>
+    <hr>
+    <br>
+
+    <h3 class="mb-4">Website Guide</h3>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <!-- Player Totals -->
+        <div class="col">
+            <div class="card h-100 stat-card">
+                <div class="card-body">
+                    <h5 class="card-title">Player Totals</h5>
+                    <p class="card-text">Access cumulative regular season stats like points, rebounds, assists, and more.</p>
+                    <a href="{{ url_for('player_stats_totals') }}" class="btn btn-primary">View Totals</a>
+                </div>
+            </div>
+        </div>
+        <!-- Player Advanced -->
+        <div class="col">
+            <div class="card h-100 stat-card">
+                <div class="card-body">
+                    <h5 class="card-title">Player Advanced Stats</h5>
+                    <p class="card-text">Dive into advanced metrics such as PER, VORP, Box Plus Minus, and more.</p>
+                    <a href="{{ url_for('player_stats_advanced') }}" class="btn btn-primary">View Advanced Stats</a>
+                </div>
+            </div>
+        </div>
+        <!-- Playoff Totals -->
+        <div class="col">
+            <div class="card h-100 stat-card">
+                <div class="card-body">
+                    <h5 class="card-title">Playoff Totals</h5>
+                    <p class="card-text">Explore cumulative playoff statistics for various seasons.</p>
+                    <a href="{{ url_for('player_stats_playoffs') }}" class="btn btn-primary">View Playoff Totals</a>
+                </div>
+            </div>
+        </div>
+        <!-- Playoff Advanced -->
+        <div class="col">
+            <div class="card h-100 stat-card">
+                <div class="card-body">
+                    <h5 class="card-title">Playoff Advanced Stats</h5>
+                    <p class="card-text">Analyze advanced playoff metrics for in-depth performance insights.</p>
+                    <a href="{{ url_for('player_stats_advanced_playoffs') }}" class="btn btn-primary">View Playoff Advanced Stats</a>
+                </div>
+            </div>
+        </div>
+        <!-- Player Trends -->
+        <div class="col">
+            <div class="card h-100 stat-card">
+                <div class="card-body">
+                    <h5 class="card-title">Player Trends</h5>
+                    <p class="card-text">Visualize player performance trends over multiple seasons.</p>
+                    <a href="{{ url_for('player_trends') }}" class="btn btn-primary">View Trends</a>
+                </div>
+            </div>
+        </div>
+        <!-- Compare Players -->
+        <div class="col">
+            <div class="card h-100 stat-card">
+                <div class="card-body">
+                    <h5 class="card-title">Compare Players</h5>
+                    <p class="card-text">Compare statistics between different players side by side.</p>
+                    <a href="{{ url_for('compare_players') }}" class="btn btn-primary">Compare Now</a>
+                </div>
+            </div>
+        </div>
+        <!-- Shot Distribution -->
+        <div class="col">
+            <div class="card h-100 stat-card">
+                <div class="card-body">
+                    <h5 class="card-title">Shot Distribution</h5>
+                    <p class="card-text">Analyze shot distribution patterns for individual players.</p>
+                    <a href="{{ url_for('player_shot_distribution') }}" class="btn btn-primary">View Shot Distribution</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 stat-card">
+                <div class="card-body">
+                    <h5 class="card-title">AI Helper</h5>
+                    <p class="card-text">AI Generated Player Summary.</p>
+                    <a href="{{ url_for('ai_summary') }}" class="btn btn-primary">Access Helper</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

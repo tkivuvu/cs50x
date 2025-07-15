@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Error
+{% endblock %}
+
+{% block main %}
+<div class="center-error">
+    <img 
+        alt="{{ top }}" 
+        src="https://api.memegen.link/images/custom/{{ top | urlencode }}/{{ bottom | urlencode }}.jpg?background=https://i.imgur.com/ibPry8m.jpeg&width=400"
+        title="{{ top }}"
+        class="img-fluid border"
+    >
+</div>
+{% endblock %}
+
+
+
