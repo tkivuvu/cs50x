@@ -19,15 +19,15 @@ db = SQL("sqlite:///nba_cache.db")
 # AI helper tools 
 # ----------------------------
 # Smart player query assistant 
-@app.route("/ai-summary", methods=["GET", "POST"])
-def ai_summary():
+@app.route("/smart-summary", methods=["GET", "POST"])
+def smart_summary():
     summary = None
     if request.method == "POST":
         name = request.form.get("player")
         season = request.form.get("season")
         stats = fetch_player_totals(name, season)
         summary = summarize_player_totals(stats)
-    return render_template("ai_summary.html", summary=summary)
+    return render_template("smart_summary.html", summary=summary)
 
 
 
