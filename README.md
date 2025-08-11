@@ -63,5 +63,5 @@ This project is part of Harvard’s CS50x curriculum and is licensed under the [
 
 ## 📫 Contact
 
-If you'd like to connect, feel free to reach out via [email](t.kivuvu@gmail.com), [linkdin](...) or [GitHub](https://github.com/tkivuvu).
+If you'd like to connect, feel free to reach out via email (t.kivuvu@gmail.com), [linkdin](https://www.linkedin.com/in/thibault-kivuvu-aa5459375/) or [GitHub](https://github.com/tkivuvu).
 
