@@ -370,11 +370,22 @@ def players_quick_access():
 def player_trends():
     if request.method == "POST":
         # --- Get form inputs ---
-        name = request.form.get("name")
+        name = (request.form.get("name") or "").strip()
         season = request.form.get("season", type=int)
 
         if not name or not season:
             return error("Missing player name or season", 400)
+
+        # 🔍 Sanity check: make sure we actually have stats for this combo
+        res = fetch_player_totals(name, season)
+        if "combined" not in res or not res["combined"]:
+            return error(
+                res.get(
+                    "error",
+                    f"No stats found for {name} in season {season}."
+                ),
+                404,
+            )
 
         # --- Render trends results ---
         return render_template(
@@ -386,44 +397,94 @@ def player_trends():
     # --- Render initial form ---
     return render_template("player_trends_search.html")
 
-    
+
 # 📝 Form Route – Compare Two Players' Stats
 @app.route("/compare_players", methods=["GET", "POST"])
 def compare_players():
     if request.method == "POST":
         # --- Get form inputs ---
-        player1 = request.form.get("player1")
-        player2 = request.form.get("player2")
+        player1 = (request.form.get("player1") or "").strip()
+        player2 = (request.form.get("player2") or "").strip()
         season  = request.form.get("season", type=int)
 
         if not player1 or not player2 or not season:
             return error("Missing two player names or season", 400)
 
-        # --- Helper: Fetch per-game totals ---
-        def get_totals(name):
-            raw = fetch_player_totals(name, season)["combined"]
-            games = raw.get("games") or 1
-            return {
-                "PPG": raw.get("points", 0) / games,
-                "APG": raw.get("assists", 0) / games,
-                "RPG": raw.get("totalRb", 0) / games,
-                "BPG": raw.get("blocks", 0) / games,
-                "FG%": raw.get("fieldPercent", 0) * 100
-            }
+        # --- Fetch totals for both players ---
+        totals1 = fetch_player_totals(player1, season)
+        if "combined" not in totals1 or totals1["combined"] is None:
+            return error(
+                totals1.get(
+                    "error",
+                    f"No totals stats found for {player1} in {season}."
+                ),
+                404,
+            )
 
-        # --- Helper: Fetch advanced metrics ---
-        def get_advanced(name):
-            raw = fetch_player_advanced(name, season)["combined"]
-            return {
-                "PER":       raw.get("per", 0),
-                "WinShares": raw.get("winShares", 0),
-                "Usage%":    raw.get("usagePercent", 0),
-                "BPM":       raw.get("box", 0)
-            }
+        totals2 = fetch_player_totals(player2, season)
+        if "combined" not in totals2 or totals2["combined"] is None:
+            return error(
+                totals2.get(
+                    "error",
+                    f"No totals stats found for {player2} in {season}."
+                ),
+                404,
+            )
 
-        # --- Merge totals + advanced for each player ---
-        stats1 = {**get_totals(player1), **get_advanced(player1)}
-        stats2 = {**get_totals(player2), **get_advanced(player2)}
+        # --- Fetch advanced stats for both players ---
+        adv1 = fetch_player_advanced(player1, season)
+        if "combined" not in adv1 or adv1["combined"] is None:
+            return error(
+                adv1.get(
+                    "error",
+                    f"No advanced stats found for {player1} in {season}."
+                ),
+                404,
+            )
+
+        adv2 = fetch_player_advanced(player2, season)
+        if "combined" not in adv2 or adv2["combined"] is None:
+            return error(
+                adv2.get(
+                    "error",
+                    f"No advanced stats found for {player2} in {season}."
+                ),
+                404,
+            )
+
+        # --- Extract combined entries ---
+        raw_tot1 = totals1["combined"]
+        raw_tot2 = totals2["combined"]
+        raw_adv1 = adv1["combined"]
+        raw_adv2 = adv2["combined"]
+
+        # --- Build per-game totals ---
+        games1 = raw_tot1.get("games") or 1
+        games2 = raw_tot2.get("games") or 1
+
+        stats1 = {
+            "PPG": raw_tot1.get("points", 0) / games1,
+            "APG": raw_tot1.get("assists", 0) / games1,
+            "RPG": raw_tot1.get("totalRb", 0) / games1,
+            "BPG": raw_tot1.get("blocks", 0) / games1,
+            "FG%": (raw_tot1.get("fieldPercent", 0) or 0) * 100,
+            "PER":       raw_adv1.get("per", 0),
+            "WinShares": raw_adv1.get("winShares", 0),
+            "Usage%":    raw_adv1.get("usagePercent", 0),
+            "BPM":       raw_adv1.get("box", 0),
+        }
+
+        stats2 = {
+            "PPG": raw_tot2.get("points", 0) / games2,
+            "APG": raw_tot2.get("assists", 0) / games2,
+            "RPG": raw_tot2.get("totalRb", 0) / games2,
+            "BPG": raw_tot2.get("blocks", 0) / games2,
+            "FG%": (raw_tot2.get("fieldPercent", 0) or 0) * 100,
+            "PER":       raw_adv2.get("per", 0),
+            "WinShares": raw_adv2.get("winShares", 0),
+            "Usage%":    raw_adv2.get("usagePercent", 0),
+            "BPM":       raw_adv2.get("box", 0),
+        }
 
         # --- Render comparison results ---
         return render_template(
@@ -437,25 +498,36 @@ def compare_players():
     # --- Render initial form ---
     return render_template("compare_players_search.html")
 
-
 # 📝 Form Route – Display Player Shot Distribution Breakdown
 @app.route("/player_shot_distribution", methods=["GET", "POST"])
 def player_shot_distribution():
     if request.method == "POST":
         # --- Get form inputs ---
-        name = request.form.get("name")
+        name = (request.form.get("name") or "").strip()
         season = request.form.get("season", type=int)
 
         if not name or not season:
             return error("Missing player name or season", 400)
 
         # --- Fetch player data ---
-        tot = fetch_player_totals(name, season)["combined"]
+        res = fetch_player_totals(name, season)
+        if "combined" not in res or res["combined"] is None:
+            # Optional: print for debugging
+            print("Shot distribution fetch failed:", res)
+            return error(
+                res.get(
+                    "error",
+                    f"No totals stats found for {name} in {season}."
+                ),
+                404,
+            )
+
+        tot = res["combined"]
 
         # --- Prepare attempt counts ---
         three_attempts = tot.get("threeAttempts", 0)
-        two_attempts = tot.get("twoAttempts", 0)
-        ft_attempts = tot.get("ftAttempts", 0)
+        two_attempts   = tot.get("twoAttempts", 0)
+        ft_attempts    = tot.get("ftAttempts", 0)
 
         # --- Render results page with data ---
         return render_template(
@@ -469,7 +541,6 @@ def player_shot_distribution():
 
     # --- Render initial form page ---
     return render_template("player_shot_distribution_search.html")
-
 
 
 # -----------------------------------

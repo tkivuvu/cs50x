@@ -40,6 +40,11 @@ TEAM_LOGO_MAP = {
     "HOU": "rockets",
 }
 
+# 🔗 New NBA API base URL
+BASE_URL = "https://api.server.nbaapi.com"
+DEFAULT_PAGE_SIZE = 500  # big enough to cover almost all players for a season
+
+
 def get_team_logo_url(team_abbr):
     """
     Given a 3-letter NBA team abbreviation, return the corresponding SVG logo path.
@@ -48,6 +53,7 @@ def get_team_logo_url(team_abbr):
     if not slug:
         return None
     return url_for("static", filename=f"logos/{slug}_logo.svg")
+
 
 # -------------------------------------------------------
 # 🛠️ Initialize Local SQLite Cache – One-Time Table Setup
@@ -105,6 +111,20 @@ def initialize_db():
     return db
 
 
+def _filter_by_player_name(data, player_name):
+    """
+    Filter API results for a given player name (case-insensitive, partial match).
+    """
+    if not data:
+        return []
+
+    query = player_name.strip().lower()
+    return [
+        row for row in data
+        if query in str(row.get("playerName", "")).lower()
+    ]
+
+
 # ---------------------------------------------------
 # 📊 Fetch Regular Season Totals Stats for a Player
 # ---------------------------------------------------
@@ -114,66 +134,84 @@ def fetch_player_totals(player_name, season, db=None):
         db = initialize_db()
 
     try:
-        # 🔗 Query NBA Stats API
+        # 🔗 New NBA Stats API endpoint
         response = requests.get(
-            "http://rest.nbaapi.com/api/PlayerDataTotals/query",
+            f"{BASE_URL}/api/playertotals",
             params={
-                "playerName": player_name,
                 "season": season,
-                "sortBy": "PlayerName",
-                "ascending": True,
-                "pageNumber": 1,
-                "pageSize": 10
-            }
+                "isPlayoff": False,
+                "page": 1,
+                "pageSize": DEFAULT_PAGE_SIZE,
+                "sortBy": "points",
+                "ascending": False,
+            },
+            timeout=10,
         )
 
         if response.status_code != 200:
-            return {"error": "API request failed".format(response.status_code)}
+            return {
+                "error": f"API request failed with status {response.status_code}"
+            }
 
-        data = response.json()
+        payload = response.json()
+        data = payload.get("data", [])
+
+        # Filter by player name locally (new API does not support playerName filter directly)
+        data = _filter_by_player_name(data, player_name)
+
         if not data:
             return {"error": "Player not found"}
 
-        
         player_id = data[0]["playerId"]
 
         # 🔍 Look for cached combined stats (TOT/2TM)
         cached = db.execute(
-            '''
+            """
             SELECT stats_json FROM player_totals
             WHERE playerId = ? AND season = ?
               AND team IN ('TOT', '2TM')
               AND timestamp > datetime('now', '-1 day')
-            ''',
-            player_id, season
+            """,
+            player_id,
+            season,
         )
 
         if cached:
             combined_entry = json.loads(cached[0]["stats_json"])
             rows = db.execute(
-                '''
+                """
                 SELECT stats_json FROM player_totals
                 WHERE playerId = ? AND season = ?
-                ''',
-                player_id, season
+                """,
+                player_id,
+                season,
             )
             entries = [json.loads(r["stats_json"]) for r in rows]
             return {"combined": combined_entry, "entries": entries}
 
         # 💾 Cache all entries (individual + combined)
         for entry in data:
-            db.execute('''
+            db.execute(
+                """
                 INSERT OR REPLACE INTO player_totals
                 (playerId, season, team, stats_json)
                 VALUES (?, ?, ?, ?)
-            ''', entry["playerId"], season, entry["team"], json.dumps(entry))
+                """,
+                entry["playerId"],
+                entry["season"],
+                entry["team"],
+                json.dumps(entry),
+            )
 
         # 🔢 Prioritize combined stats if available
-        combined = next((e for e in data if e["team"] in ("TOT","2TM")), data[0])
+        combined = next(
+            (e for e in data if e.get("team") in ("TOT", "2TM")),
+            data[0],
+        )
 
         return {
-        "combined": combined,
-        "entries": data
+            "combined": combined,
+            "entries": data,
         }
 
     except Exception as e:
@@ -190,21 +228,27 @@ def fetch_player_advanced(player_name, season, db=None):
 
     try:
         response = requests.get(
-            "http://rest.nbaapi.com/api/PlayerDataAdvanced/query",
+            f"{BASE_URL}/api/playeradvancedstats",
             params={
-                "playerName": player_name,
                 "season": season,
-                "sortBy": "PlayerName",
-                "ascending": True,
-                "pageNumber": 1,
-                "pageSize": 10
-            }
+                "isPlayoff": False,
+                "page": 1,
+                "pageSize": DEFAULT_PAGE_SIZE,
+                "sortBy": "win_shares",  # any valid field, we filter by name later
+                "ascending": False,
+            },
+            timeout=10,
         )
 
         if response.status_code != 200:
-            return {"error": "API request failed".format(response.status_code)}
+            return {
+                "error": f"API request failed with status {response.status_code}"
+            }
 
-        data = response.json()
+        payload = response.json()
+        data = payload.get("data", [])
+
+        data = _filter_by_player_name(data, player_name)
         if not data:
             return {"error": "Player not found"}
 
@@ -212,39 +256,50 @@ def fetch_player_advanced(player_name, season, db=None):
 
         # Cache check for advanced stats
         cached = db.execute(
-            '''
+            """
             SELECT stats_json FROM player_advanced
             WHERE playerId = ? AND season = ?
               AND team IN ('TOT', '2TM')
               AND timestamp > datetime('now', '-1 day')
-            ''',
-            player_id, season
+            """,
+            player_id,
+            season,
         )
 
         if cached:
             combined_entry = json.loads(cached[0]["stats_json"])
             rows = db.execute(
-                '''
+                """
                 SELECT stats_json FROM player_advanced
                 WHERE playerId = ? AND season = ?
-                ''',
-                player_id, season
+                """,
+                player_id,
+                season,
             )
             entries = [json.loads(r["stats_json"]) for r in rows]
             return {"combined": combined_entry, "entries": entries}
 
         for entry in data:
-            db.execute('''
+            db.execute(
+                """
                 INSERT OR REPLACE INTO player_advanced
                 (playerId, season, team, stats_json)
                 VALUES (?, ?, ?, ?)
-            ''', entry["playerId"], season, entry["team"], json.dumps(entry))
+                """,
+                entry["playerId"],
+                entry["season"],
+                entry["team"],
+                json.dumps(entry),
+            )
 
-        combined = next((e for e in data if e["team"] in ("TOT","2TM")), data[0])
+        combined = next(
+            (e for e in data if e.get("team") in ("TOT", "2TM")),
+            data[0],
+        )
 
         return {
-        "combined": combined,
-        "entries": data
+            "combined": combined,
+            "entries": data,
         }
 
     except Exception as e:
@@ -260,49 +315,67 @@ def fetch_advanced_playoffs(player_name, season, db=None):
         db = initialize_db()
 
     try:
-
         response = requests.get(
-            "http://rest.nbaapi.com/api/PlayerDataAdvancedPlayoffs/query",
+            f"{BASE_URL}/api/playeradvancedstats",
             params={
-                "playerName": player_name,
                 "season": season,
-                "sortBy": "PlayerName",
-                "ascending": True,
-                "pageNumber": 1,
-                "pageSize": 10
-            }
+                "isPlayoff": True,
+                "page": 1,
+                "pageSize": DEFAULT_PAGE_SIZE,
+                "sortBy": "win_shares",
+                "ascending": False,
+            },
+            timeout=10,
         )
 
         if response.status_code != 200:
-            return {"error": "API request failed"}
+            return {
+                "error": f"API request failed with status {response.status_code}"
+            }
 
-        data = response.json()
+        payload = response.json()
+        data = payload.get("data", [])
+
+        data = _filter_by_player_name(data, player_name)
         if not data:
             return {"error": "Player not found"}
-
 
         player_id = data[0]["playerId"]
 
         # Cache check
-        cached = db.execute('''
+        cached = db.execute(
+            """
             SELECT stats_json FROM player_advanced_playoffs
             WHERE playerId = ? AND season = ?
-            AND timestamp > datetime('now', '-1 day')
-        ''', player_id, season)
+              AND timestamp > datetime('now', '-1 day')
+            """,
+            player_id,
+            season,
+        )
 
         if cached:
             return json.loads(cached[0]["stats_json"])
 
         # Store to cache
         for entry in data:
-            db.execute('''
+            db.execute(
+                """
                 INSERT OR REPLACE INTO player_advanced_playoffs
                 (playerId, season, team, stats_json)
                 VALUES (?, ?, ?, ?)
-            ''', entry["playerId"], season, entry["team"], json.dumps(entry))
+                """,
+                entry["playerId"],
+                entry["season"],
+                entry["team"],
+                json.dumps(entry),
+            )
 
-
-        return entry
+        # For backwards compatibility, return the "combined" / first entry
+        combined = next(
+            (e for e in data if e.get("team") in ("TOT", "2TM")),
+            data[0],
+        )
+        return combined
 
     except Exception as e:
         return {"error": str(e)}
@@ -318,43 +391,63 @@ def fetch_playoff_totals(player_name, season, db=None):
 
     try:
         response = requests.get(
-            "http://rest.nbaapi.com/api/PlayerDataTotalsPlayoffs/query",
+            f"{BASE_URL}/api/playertotals",
             params={
-                "playerName": player_name,
                 "season": season,
-                "sortBy": "PlayerName",
-                "ascending": True,
-                "pageNumber": 1,
-                "pageSize": 10
-            }
+                "isPlayoff": True,
+                "page": 1,
+                "pageSize": DEFAULT_PAGE_SIZE,
+                "sortBy": "points",
+                "ascending": False,
+            },
+            timeout=10,
         )
 
         if response.status_code != 200:
-            return {"error": "API request failed"}
+            return {
+                "error": f"API request failed with status {response.status_code}"
+            }
 
-        data = response.json()
+        payload = response.json()
+        data = payload.get("data", [])
+
+        data = _filter_by_player_name(data, player_name)
         if not data:
             return {"error": "Player not found"}
 
         player_id = data[0]["playerId"]
 
-        cached = db.execute('''
+        cached = db.execute(
+            """
             SELECT stats_json FROM player_totals_playoffs
             WHERE playerId = ? AND season = ?
-            AND timestamp > datetime('now', '-1 day')
-        ''', player_id, season)
+              AND timestamp > datetime('now', '-1 day')
+            """,
+            player_id,
+            season,
+        )
 
         if cached:
             return json.loads(cached[0]["stats_json"])
 
         for entry in data:
-            db.execute('''
+            db.execute(
+                """
                 INSERT OR REPLACE INTO player_totals_playoffs
                 (playerId, season, team, stats_json)
                 VALUES (?, ?, ?, ?)
-            ''', entry["playerId"], season, entry["team"], json.dumps(entry))
+                """,
+                entry["playerId"],
+                entry["season"],
+                entry["team"],
+                json.dumps(entry),
+            )
 
-        return entry
+        combined = next(
+            (e for e in data if e.get("team") in ("TOT", "2TM")),
+            data[0],
+        )
+        return combined
 
     except Exception as e:
         return {"error": str(e)}
@@ -402,7 +495,6 @@ def summarize_player_totals(stats):
     fg = player.get("fieldPercent", 0)
     three = player.get("threePercent", 0)
     ft = player.get("ftPercent", 0)
-    
 
     if games == 0:
         return f"{name} did not play any games in the {season} season."
@@ -417,33 +509,6 @@ def summarize_player_totals(stats):
         f"In the {season} season, {name} played {games} games, "
         f"averaging {ppg} points, {rpg} rebounds, and {apg} assists per game. "
         f"{name} also had {stl} steals and {blk} blocks per game. "
-        f"He shot {fg:.1%} from the field, {three:.1%} from three-point range, " 
+        f"He shot {fg:.1%} from the field, {three:.1%} from three-point range, "
         f"and {ft:.1%} from the free-throw line."
     )
-
-#f"In the {season} season, {name} played {games} games, "
-#f"averaging {ppg} points, {rpg} rebounds, and {apg} assists per game."
-
-#def summarize_player_totals(stats):
-    """Generate a rule-based summary of a player's season stats."""
-    name = stats["playerName"]
-    season = stats["season"]
-    pts = stats["points"]
-    ast = stats["assists"]
-    trb = stats["totalRb"]
-    stl = stats["steals"]
-    blk = stats["blocks"]
-    fg = stats["fieldPercent"]
-    three = stats["threePercent"]
-    ft = stats["ftPercent"]
-
-    summary = (
-        f"In the {season} season, {name} scored {pts} points, grabbed {trb} rebounds, "
-        f"and dished out {ast} assists. He also recorded {stl} steals and {blk} blocks. "
-        f"{name} shot {fg:.1%} from the field, {three:.1%} from three-point range, and {ft:.1%} from the free-throw line."
-    )
-
-    return summary
-
-
-

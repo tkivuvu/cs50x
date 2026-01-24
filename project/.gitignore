@@ -1,0 +1,18 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+venv/
+.venv/
+
+# macOS system files
+.DS_Store
+
+# SQLite DB files (if you don't want to track them)
+nba_cache.db
+*.db
+
+# Logs
+*.log

@@ -16,7 +16,7 @@
         <title>{% block title %}NBA Stats Hub{% endblock %}</title>
         {% block head %}{% endblock %}
     </head>
-    <body>
+    <body class="d-flex flex-column min-vh-100">
         <!-- Navigation Bar -->
         <nav class="navbar navbar-expand-lg navbar-dark nba-navbar">
             <div class="container">
@@ -53,7 +53,7 @@
 
                     <div class="form-check form-switch text-white me-3">
                         <input class="form-check-input" type="checkbox" id="darkModeToggle">
-                        <label class="form-check-label" for="darkModeToggle">Dark Mode</label>
+                        <label class="form-check-label" for="darkModeToggle">Dark/Light Mode</label>
                     </div>
 
                     <form class="d-flex" action="{{ url_for('players_quick_access') }}" method="post">
@@ -71,21 +71,28 @@
             </div>
         {% endif %}
 
+        <!-- 2018 Season Notice -->
+        <div class="alert api-warning text-center mb-0" role="alert">
+            ⚠️ <strong>Notice:</strong> Player statistics for the <strong>2018 season</strong> 
+            are temporarily unavailable due to an upstream NBA API issue.
+            All other seasons (2003–present) work normally.
+        </div>
+
         <!-- Main Content Block -->
         <main class="container my-5">
             {% block main %}{% endblock %}  <!-- Changed from 'content' to 'main' -->
         </main>
 
         <!-- Footer -->
-        <footer class="bg-dark text-white mt-5">
+        <footer class="bg-dark text-white mt-auto py-4">
             <div class="container py-4">
                 <div class="d-flex justify-content-between flex-wrap">
                     <div>
                         <h5>NBA Stats Hub</h5>
-                        <p>Comprehensive basketball statistics from 1993 to present</p>
+                        <p>Comprehensive basketball statistics from 2003 to present</p>
                     </div>
                     <div class="text-end">
-                        <p>Data sourced from <a href="http://rest.nbaapi.com" class="text-white">NBAAPI.COM</a></p>
+                        <p>Data sourced from <a href="https://api.server.nbaapi.com/" class="text-white">api.server.nbaapi.com</a></p>
                         <p>&copy; 2025 NBA Stats Hub</p>
                     </div>
                 </div>
