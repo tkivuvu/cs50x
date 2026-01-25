@@ -31,7 +31,6 @@ def smart_summary():
 
 
 
-
 # ----------------------------
 # 🔁 App-Wide Lifecycle Hooks
 # ----------------------------
@@ -108,6 +107,7 @@ def player_stats_totals():
                 "avg_twoattempts":    round(obj.get("twoAttempts", 0) / g, 1),
                 "avg_threefg":        round(obj.get("threeFg", 0) / g, 1),
                 "avg_threeattempts":  round(obj.get("threeAttempts", 0) / g, 1),
+                "effectivefp":        round(obj.get("effectFgPercent", 0) * 100, 1),  
                 "ftpercent":          round(obj.get("ftPercent", 0) * 100, 1),
                 "fieldpercent":       round(obj.get("fieldPercent", 0) * 100, 1),
                 "twopercent":         round(obj.get("twoPercent", 0) * 100, 1),
