@@ -512,3 +512,41 @@ def summarize_player_totals(stats):
         f"He shot {fg:.1%} from the field, {three:.1%} from three-point range, "
         f"and {ft:.1%} from the free-throw line."
     )
+    
+
+def build_player_trends_data(name, season):
+    """
+    Build season-by-season trend data for a player
+    from (season - 4) through season.
+    Returns:
+        display_name: API-correct player name
+        trends_data: list of season stat dictionaries
+    """
+    trends_data = []
+    display_name = name
+
+    for yr in range(season - 4, season + 1):
+        totals = fetch_player_totals(name, yr)
+        adv = fetch_player_advanced(name, yr)
+
+        if (
+            "combined" not in totals or totals["combined"] is None or
+            "combined" not in adv or adv["combined"] is None
+        ):
+            continue
+
+        tot = totals["combined"]
+        adv_tot = adv["combined"]
+
+        games = tot.get("games") or 1
+        display_name = tot.get("playerName", display_name)
+
+        trends_data.append({
+            "season": yr,
+            "PPG": (tot.get("points", 0) or 0) / games,
+            "APG": (tot.get("assists", 0) or 0) / games,
+            "RPG": (tot.get("totalRb", 0) or 0) / games,
+            "PER": adv_tot.get("per", 0) or 0
+        })
+
+    return display_name, trends_data

@@ -55,7 +55,7 @@
 
         <div id="by-team" style="display:none;">
           {% for t in team_rows %}
-            <div class="card mb-2 p-2">
+            <div class="stats-card mb-2 p-3">
               <h5>{{ t.team }}</h5>
               {% if t.logo_url %}
                 <img src="{{ t.logo_url }}" alt="{{ t.team }} logo" width="80" class="mb-2">

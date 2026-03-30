@@ -1,7 +1,7 @@
 from cs50 import SQL
 from datetime import datetime, timedelta, timezone
 from flask import Flask, flash, redirect, render_template, request, send_file, session, url_for
-from helpers import error, fetch_player_totals, fetch_player_advanced, fetch_advanced_playoffs, fetch_playoff_totals, get_team_logo_url, summarize_player_totals
+from helpers import error, fetch_player_totals, fetch_player_advanced, fetch_advanced_playoffs, fetch_playoff_totals, get_team_logo_url, summarize_player_totals, build_player_trends_data
 from io import BytesIO
 
 import matplotlib
@@ -376,22 +376,22 @@ def player_trends():
         if not name or not season:
             return error("Missing player name or season", 400)
 
-        # 🔍 Sanity check: make sure we actually have stats for this combo
-        res = fetch_player_totals(name, season)
-        if "combined" not in res or not res["combined"]:
+        # --- Build season-by-season trends data ---
+        display_name, trends_data = build_player_trends_data(name, season)
+
+        if not trends_data:
             return error(
-                res.get(
-                    "error",
-                    f"No stats found for {name} in season {season}."
-                ),
+                f"No stats found for {name} between seasons {season - 4} and {season}.",
                 404,
             )
 
         # --- Render trends results ---
         return render_template(
             "player_trends.html",
-            name=name,
-            season=season
+            name=display_name,
+            search_name=name,
+            season=season,
+            trends_data=trends_data
         )
 
     # --- Render initial form ---
@@ -457,6 +457,10 @@ def compare_players():
         raw_tot2 = totals2["combined"]
         raw_adv1 = adv1["combined"]
         raw_adv2 = adv2["combined"]
+        
+        # --- Use API player names for display ---
+        display_p1 = raw_tot1.get("playerName", player1)
+        display_p2 = raw_tot2.get("playerName", player2)
 
         # --- Build per-game totals ---
         games1 = raw_tot1.get("games") or 1
@@ -467,6 +471,7 @@ def compare_players():
             "APG": raw_tot1.get("assists", 0) / games1,
             "RPG": raw_tot1.get("totalRb", 0) / games1,
             "BPG": raw_tot1.get("blocks", 0) / games1,
+            "SPG": raw_tot1.get("steals", 0) / games1,
             "FG%": (raw_tot1.get("fieldPercent", 0) or 0) * 100,
             "PER":       raw_adv1.get("per", 0),
             "WinShares": raw_adv1.get("winShares", 0),
@@ -479,6 +484,7 @@ def compare_players():
             "APG": raw_tot2.get("assists", 0) / games2,
             "RPG": raw_tot2.get("totalRb", 0) / games2,
             "BPG": raw_tot2.get("blocks", 0) / games2,
+            "SPG": raw_tot2.get("steals", 0) / games2,
             "FG%": (raw_tot2.get("fieldPercent", 0) or 0) * 100,
             "PER":       raw_adv2.get("per", 0),
             "WinShares": raw_adv2.get("winShares", 0),
@@ -489,7 +495,7 @@ def compare_players():
         # --- Render comparison results ---
         return render_template(
             "compare_players.html",
-            p1=player1, p2=player2,
+            p1=display_p1, p2=display_p2,
             season=season,
             stats1=stats1,
             stats2=stats2
@@ -497,6 +503,7 @@ def compare_players():
 
     # --- Render initial form ---
     return render_template("compare_players_search.html")
+
 
 # 📝 Form Route – Display Player Shot Distribution Breakdown
 @app.route("/player_shot_distribution", methods=["GET", "POST"])
@@ -512,7 +519,6 @@ def player_shot_distribution():
         # --- Fetch player data ---
         res = fetch_player_totals(name, season)
         if "combined" not in res or res["combined"] is None:
-            # Optional: print for debugging
             print("Shot distribution fetch failed:", res)
             return error(
                 res.get(
@@ -524,19 +530,50 @@ def player_shot_distribution():
 
         tot = res["combined"]
 
-        # --- Prepare attempt counts ---
-        three_attempts = tot.get("threeAttempts", 0)
-        two_attempts   = tot.get("twoAttempts", 0)
-        ft_attempts    = tot.get("ftAttempts", 0)
+        # --- Use API player name for display ---
+        player_name = tot.get("playerName", name)
+
+        # --- Games played ---
+        games = tot.get("games") or 1
+
+        # --- Attempt counts ---
+        three_attempts = tot.get("threeAttempts", 0) or 0
+        two_attempts = tot.get("twoAttempts", 0) or 0
+        ft_attempts = tot.get("ftAttempts", 0) or 0
+
+        # --- Made counts ---
+        three_made = tot.get("threeFg", 0) or 0
+        two_made = tot.get("twoFg", 0) or 0
+        ft_made = tot.get("ft", 0) or 0
+
+        # --- Percent averages ---
+        three_point_average = (three_made / three_attempts * 100) if three_attempts else 0
+        two_point_average = (two_made / two_attempts * 100) if two_attempts else 0
+        free_throw_average = (ft_made / ft_attempts * 100) if ft_attempts else 0
+
+        # --- Per-game makes ---
+        three_point_per_game = three_made / games
+        two_point_per_game = two_made / games
+        free_throw_per_game = ft_made / games
 
         # --- Render results page with data ---
         return render_template(
             "player_shot_distribution.html",
-            name=name,
+            name=player_name,
             season=season,
+            games=games,
             three_attempts=three_attempts,
             two_attempts=two_attempts,
-            ft_attempts=ft_attempts
+            ft_attempts=ft_attempts,
+            three_made=three_made,
+            two_made=two_made,
+            ft_made=ft_made,
+            three_point_average=three_point_average,
+            three_point_per_game=three_point_per_game,
+            two_point_average=two_point_average,
+            two_point_per_game=two_point_per_game,
+            free_throw_average=free_throw_average,
+            free_throw_per_game=free_throw_per_game
         )
 
     # --- Render initial form page ---

@@ -4,17 +4,42 @@
 {% block main %}
   <h2>{{ name }} (Seasons {{ season-4 }}–{{ season }})</h2>
 
-  <div style="display: flex; align-items: flex-start; gap: 30px; margin-top: 20px;">
-    <!-- Graph Image -->
-    <img src="{{ url_for('player_trends_plot') }}?name={{ name }}&season={{ season }}"
-         alt="Trends for {{ name }}" style="max-width: 600px; height: auto;">
+  <div style="display: flex; align-items: flex-start; gap: 40px; margin-top: 25px;">
 
-    <!-- Explanatory Text -->
-    <div>
-      <p><strong>PPG</strong> = Points Per Game</p>
-      <p><strong>APG</strong> = Assists Per Game</p>
-      <p><strong>RPG</strong> = Rebounds Per Game</p>
-      <p><strong>PER</strong> = Player Efficiency Rating</p>
+    <!-- Graph Image -->
+    <div style="flex: 1;">
+      <img 
+        src="{{ url_for('player_trends_plot') }}?name={{ search_name }}&season={{ season }}"
+        alt="Trends for {{ name }}"
+        style="max-width: 100%; height: auto; display: block;"
+      >
     </div>
+
+    <!-- Stats Card -->
+    <div class="stats-card p-3" style="min-width: 300px; max-width: 360px; margin-left: auto; margin-top:-60px;">
+      
+      <h4 style="margin-bottom: 12px; text-align: center;">Season Breakdown</h4>
+
+      {% for row in trends_data %}
+        <div style="margin-bottom: 12px;">
+          
+          <!-- Season Label -->
+          <h5 style="margin-bottom: 6px; font-weight: 600;">
+            {{ row.season }}
+          </h5>
+
+          <!-- Stats -->
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item py-1">PPG: {{ row.PPG|round(1) }}</li>
+            <li class="list-group-item py-1">APG: {{ row.APG|round(1) }}</li>
+            <li class="list-group-item py-1">RPG: {{ row.RPG|round(1) }}</li>
+            <li class="list-group-item py-1">PER: {{ row.PER|round(1) }}</li>
+          </ul>
+
+        </div>
+      {% endfor %}
+
+    </div>
+
   </div>
 {% endblock %}
